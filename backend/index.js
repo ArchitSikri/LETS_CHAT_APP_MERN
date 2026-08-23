@@ -5,12 +5,14 @@ const connectToDb = require('./database/config');
 const app = express();
 const userRoutes = require('./routes/user.route');
 const cookieparser = require('cookie-parser');
+const msgRoutes = require("./routes/message.route")
 
 app.use(express.json());
 app.use(cookieparser());
 
 
 app.use("/api/users" , userRoutes);
+app.use("/api/msg" , msgRoutes);
 
 
 const port = process.env.PORT ;
