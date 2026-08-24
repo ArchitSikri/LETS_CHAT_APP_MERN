@@ -33,4 +33,19 @@ const sendMsg = async(req,res) => {
   }
 };
 
-module.exports = { sendMsg };
+const getMsg = async (req , res) => {
+  try{
+    const receiverId = req.params.id;
+    const senderId = req.id;
+    const conversation = await Conversation.findOne({
+     participants : {$all : [senderId ,  receiverId]}
+    }).populate("messages");
+
+    return res.status(200).json(conversation?.messages)
+  }
+  catch(err){
+    console.log(err)
+  }
+}
+
+module.exports = { sendMsg , getMsg};
