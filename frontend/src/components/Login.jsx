@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link , useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-
+import {useDispatch} from '@reduxjs/toolkit';
+import { setAuthUser } from '../redux/UserSlice';
 
 
 const Login = () => {
@@ -11,7 +12,8 @@ const Login = () => {
     username :  "" ,
     password : "" 
   });
-
+   
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -27,6 +29,7 @@ const Login = () => {
       if (res.data) {
         toast.success("Logged in successfully");
         navigate("/homepage");
+        dispatch(setAuthUser(res.data))
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Unable to log in");
