@@ -7,11 +7,15 @@ import HomePage from '../src/components/HomePage'
 
 const router = createBrowserRouter([
   {
-    path : "/",
+    path : "/homepage",
     element : <HomePage/>
   },
   {
-    path : "/register",
+    path : "/",
+    element : <Signup/>
+  },
+  {
+    path : "/signup",
     element : <Signup/>
   },
   {

@@ -4,13 +4,13 @@ const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
     try {
-        const { fullName, username, password, confirm_password, gender } = req.body;
+        const { fullName, username, password, confirmPassword, gender } = req.body;
 
-        if (!fullName || !username || !password || !confirm_password || !gender) {
+        if (!fullName || !username || !password || !confirmPassword || !gender) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        if (password !== confirm_password) {
+        if (password !== confirmPassword) {
             return res.status(400).json({ message: "Passwords do not match" });
         }
 
@@ -32,7 +32,10 @@ const registerUser = async (req, res) => {
             profilePhoto: gender === "male" ? maleProfilePhoto : femaleProfilePhoto
         });
 
-        return res.status(201).json({ message: "User registered successfully" });
+        return res.status(201).json({
+            success: true,
+            message: "User registered successfully"
+        });
     } catch (error) {
         console.error("Error registering user:", error);
         return res.status(500).json({ message: "Internal server error" });
