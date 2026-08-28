@@ -21,15 +21,14 @@ const registerUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const maleProfilePhoto = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-        const femaleProfilePhoto = `https://avatar.iran.liara.run/public/girl?username=${username}`;
+        const profilePhoto = `https://i.pravatar.cc/150?u=${encodeURIComponent(username)}`;
 
         await User.create({
             fullName,
             username,
             password: hashedPassword,
             gender,
-            profilePhoto: gender === "male" ? maleProfilePhoto : femaleProfilePhoto
+            profilePhoto
         });
 
         return res.status(201).json({

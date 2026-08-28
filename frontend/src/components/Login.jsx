@@ -1,18 +1,16 @@
 import { useState } from 'react'
-import { Link , useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import {useDispatch} from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 import { setAuthUser } from '../redux/UserSlice';
 
-
 const Login = () => {
-   
-  const [user , setUser] = useState({
-    username :  "" ,
-    password : "" 
+  const [user, setUser] = useState({
+    username: "",
+    password: ""
   });
-   
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -21,9 +19,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post(`${baseUrl}/api/users/login`, user, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       });
       if (res.data) {
@@ -34,53 +30,67 @@ const Login = () => {
     } catch (error) {
       toast.error(error.response?.data?.message || "Unable to log in");
     }
-    setUser({
-      username: "",
-      password: ""
-    })
+    setUser({ username: "", password: "" })
   }
 
-   
-
-
-     
   return (
-   <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[url('https://c4.wallpaperflare.com/wallpaper/1023/370/544/dark-landscape-lake-hd-wallpaper-preview.jpg')] bg-cover bg-center px-4 py-10 text-white">
-      <div className="absolute inset-0 bg-slate-950/65" />
-      <div className="absolute inset-0 bg-linear-to-br from-cyan-950/40 via-transparent to-rose-950/40" />
+    <main className="min-h-screen bg-[url('https://c4.wallpaperflare.com/wallpaper/1023/370/544/dark-landscape-lake-hd-wallpaper-preview.jpg')] bg-cover bg-center flex items-center justify-center px-4 py-10">
+      {/* Simple dark overlay */}
+      <div className="absolute inset-0 bg-black/30"></div>
 
-      <section className="relative w-full max-w-xl rounded-lg border border-white/20 bg-slate-950/55 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-9">
-        <div className="mb-8 text-center">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">Join the conversation</p>
-          <h1 className="text-4xl font-bold tracking-tight">Login your account</h1>
-          <p className="mt-2 text-sm text-slate-300">A little closer to the people who matter.</p>
+      <section className="relative w-full max-w-md rounded-xl bg-black/50 backdrop-blur-md p-8 shadow-2xl border border-white/10">
+        <div className="mb-6 text-center">
+          <div className="mb-4 flex justify-center">
+            <i className="ri-chat-smile-3-line text-5xl text-blue-400"></i>
+          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+          <p className="text-sm text-gray-300">Login to your account</p>
         </div>
 
-        <form action="" className="space-y-4" onSubmit={onSubmitHandler}>
+        <form onSubmit={onSubmitHandler} className="space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="password">UserName</label>
+            <label className="mb-2 block text-sm font-medium text-gray-200" htmlFor="username">
+              Username
+            </label>
             <input
               value={user.username}
               onChange={(e) => setUser({ ...user, username: e.target.value })}
-              id="Username"
-              className="h-11 w-full rounded-md border border-white/15 bg-white/10 px-4 text-sm text-white outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:bg-white/15 focus:ring-2 focus:ring-cyan-300/20"
-              type="Username"
-              placeholder="Username" />
+              id="username"
+              className="h-11 w-full rounded-lg bg-white/10 border border-white/20 px-4 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors"
+              type="text"
+              placeholder="Enter your username"
+              required
+            />
           </div>
+
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-200" htmlFor="password">Password</label>
+            <label className="mb-2 block text-sm font-medium text-gray-200" htmlFor="password">
+              Password
+            </label>
             <input
               value={user.password}
               onChange={(e) => setUser({ ...user, password: e.target.value })}
               id="password"
-              className="h-11 w-full rounded-md border border-white/15 bg-white/10 px-4 text-sm text-white outline-none transition placeholder:text-slate-400 focus:border-cyan-300 focus:bg-white/15 focus:ring-2 focus:ring-cyan-300/20"
+              className="h-11 w-full rounded-lg bg-white/10 border border-white/20 px-4 text-sm text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none transition-colors"
               type="password"
-              placeholder="Create a password" />
+              placeholder="Enter your password"
+              required
+            />
           </div>
-          
-          
-          <button type="submit" className="btn mt-3 h-11 w-full border-0 bg-cyan-300 text-slate-950 shadow-lg shadow-cyan-950/30 transition hover:bg-cyan-200">Login</button>
-          <p className="pt-2 text-center text-sm text-slate-300">create Account ?   <Link className="font-semibold text-cyan-300 transition hover:text-cyan-200" to="/">Signup</Link></p>
+
+          <button 
+            type="submit" 
+            className="mt-4 h-11 w-full rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors"
+          >
+            Login
+          </button>
+
+          <p className="pt-2 text-center text-sm text-gray-300">
+            Don't have an account?{' '}
+            <Link className="font-semibold text-blue-400 hover:text-blue-300 transition-colors" to="/">
+              Sign up
+            </Link>
+          </p>
         </form>
       </section>
     </main>
