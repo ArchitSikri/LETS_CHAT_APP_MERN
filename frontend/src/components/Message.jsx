@@ -4,7 +4,17 @@ import { getAvatarFallback } from '../utils/avatar';
 
 const Message = ({ message }) => {
     const { authUser, selectedUser } = useSelector(store => store.user);
-    const isMyMessage = message.senderId === "me" || message.senderId === authUser?._id;
+    const authUserId = authUser?._id || authUser?.id;
+    const selectedUserId = selectedUser?._id || selectedUser?.id;
+    const sender = message?.sendId || message?.senderId;
+    const senderId = sender?._id || sender?.id || sender;
+    const isMyMessage = String(senderId) === String(authUserId);
+    const isSelectedUserMessage = String(senderId) === String(selectedUserId);
+    const senderName = isMyMessage
+        ? authUser?.fullName
+        : isSelectedUserMessage
+            ? selectedUser?.fullName
+            : 'Unknown user';
 
     return (
         <div className={`chat ${isMyMessage ? 'chat-end' : 'chat-start'}`}>
@@ -24,7 +34,7 @@ const Message = ({ message }) => {
                 </div>
             </div>
             <div className="chat-header text-gray-300 text-xs mb-1">
-                {isMyMessage ? 'You' : selectedUser?.fullName}
+                By {senderName}
                 <time className="text-xs opacity-60 ml-1">{message.createdAt}</time>
             </div>
             <div className={`chat-bubble ${

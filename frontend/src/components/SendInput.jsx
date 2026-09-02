@@ -1,17 +1,37 @@
 import React, { useState } from 'react'
+import { IoSend } from "react-icons/io5";
+import axios from "axios";
+import {useDispatch,useSelector} from "react-redux";
+import { setMessages } from '../redux/MsgSlice';
+
+
 
 const SendInput = () => {
     const [message, setMessage] = useState("");
+    const dispatch = useDispatch();
+    const {selectedUser} = useSelector(store=>store.user);
+    const {messages} = useSelector(store=>store.message);
 
-    const handleSubmit = (e) => {
+    const onSubmitHandler = async (e) => {
         e.preventDefault();
-        if (!message.trim()) return;
-        console.log("Sending message:", message);
+        try {
+            const res = await axios.post(`http://localhost:5000/api/msg/sendmsg/${selectedUser?._id}`, {message}, {
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                withCredentials:true
+            });     
+            if (res?.data?._id) {
+                dispatch(setMessages([...(Array.isArray(messages) ? messages : []), res.data]));
+            }
+        } catch (error) {
+            console.log(error);
+        } 
         setMessage("");
     }
 
     return (
-        <form onSubmit={handleSubmit} className='px-4 py-3 bg-black/30 backdrop-blur-sm border-t border-white/10'>
+        <form onSubmit={onSubmitHandler} className='px-4 py-3 bg-black/30 backdrop-blur-sm border-t border-white/10'>
             <div className='flex items-center gap-2'>
                 <button 
                     type='button' 

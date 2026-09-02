@@ -41,10 +41,11 @@ const getMsg = async (req , res) => {
      participants : {$all : [senderId ,  receiverId]}
     }).populate("messages");
 
-    return res.status(200).json(conversation?.messages)
+    return res.status(200).json(conversation?.messages || [])
   }
   catch(err){
     console.log(err)
+    return res.status(500).json({ message: "Internal server error" })
   }
 }
 
