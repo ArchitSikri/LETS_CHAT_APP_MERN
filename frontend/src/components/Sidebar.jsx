@@ -3,9 +3,13 @@ import OtherUsers from './OtherUsers';
 import { useSelector, useDispatch } from "react-redux";
 import { setOtherUsers } from '../redux/UserSlice';
 import toast from "react-hot-toast";
-import { getAvatarFallback } from '../utils/avatar';
+import useGetOtherUsers from '../hooks/useGetOtherUsers';
+import {useNavigate} from 'react-router-dom'
+import axios from 'axios';
 
 const Sidebar = () => {
+    const nevigate = useNavigate()
+    
     const [search, setSearch] = useState("");
     const { otherUsers, authUser } = useSelector(store => store.user);
     const dispatch = useDispatch();
@@ -25,35 +29,22 @@ const Sidebar = () => {
         }
     }
 
-    const logoutHandler = () => {
-        console.log("Logout clicked");
+    const logoutHandler = async () => {
+        const res = await axios.get('http://localhost:5000/api/users/logout');
+        nevigate("/login");
+        toast.success(res.data.message);
     }
 
     return (
         <div className='border-r border-white/10 p-4 flex flex-col w-full sm:w-80 bg-black/30'>
             {/* Profile Section */}
             <div className='bg-white/5 backdrop-blur-sm p-3 rounded-lg mb-4 border border-white/10'>
-                <div className='flex items-center gap-3'>
-                    <div className='avatar online'>
-                        <div className='w-12 rounded-full ring-2 ring-blue-500/50'>
-                            <img
-                                src={authUser?.profilePhoto || getAvatarFallback(authUser?.fullName)}
-                                onError={(event) => {
-                                    event.currentTarget.onerror = null;
-                                    event.currentTarget.src = getAvatarFallback(authUser?.fullName);
-                                }}
-                                alt="profile" 
-                                className='object-cover'
-                            />
-                        </div>
-                    </div>
-                    <div className='flex-1 text-white'>
-                        <p className='font-semibold'>{authUser?.fullName || "User"}</p>
-                        <p className='text-xs text-green-400 flex items-center gap-1'>
-                            <span className='w-2 h-2 bg-green-500 rounded-full'></span>
-                            Online
-                        </p>
-                    </div>
+                <div className='flex-1 text-white'>
+                    <p className='font-semibold'>{authUser?.fullName || "User"}</p>
+                    <p className='text-xs text-green-400 flex items-center gap-1'>
+                        <span className='w-2 h-2 bg-green-500 rounded-full'></span>
+                        Online
+                    </p>
                 </div>
             </div>
 

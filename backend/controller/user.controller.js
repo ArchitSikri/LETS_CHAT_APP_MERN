@@ -1,6 +1,7 @@
 const { User } = require("../models/USER.MODEL.JS");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { getAvatarWithInitials } = require("../utils/avatar");
 
 const registerUser = async (req, res) => {
     try {
@@ -21,7 +22,7 @@ const registerUser = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const profilePhoto = `https://i.pravatar.cc/150?u=${encodeURIComponent(username)}`;
+        const profilePhoto = getAvatarWithInitials(fullName);
 
         await User.create({
             fullName,
@@ -55,7 +56,7 @@ const login = async (req, res) => {
                 success: false
             });
         }
-
+        
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
             return res.status(400).json({

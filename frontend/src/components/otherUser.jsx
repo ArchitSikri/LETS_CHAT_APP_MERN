@@ -1,7 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedUser } from '../redux/UserSlice';
-import { getAvatarFallback } from '../utils/avatar';
 
 const OtherUser = ({ user }) => {
     const dispatch = useDispatch();
@@ -22,19 +21,6 @@ const OtherUser = ({ user }) => {
                     : 'hover:bg-white/5'
             } flex gap-3 items-center rounded-lg p-3 cursor-pointer transition-colors mb-1`}
         >
-            <div className={`avatar ${isOnline ? 'online' : 'offline'}`}>
-                <div className='w-12 h-12 rounded-full'>
-                    <img
-                        src={user?.profilePhoto || getAvatarFallback(user?.fullName)}
-                        onError={(event) => {
-                            event.currentTarget.onerror = null;
-                            event.currentTarget.src = getAvatarFallback(user?.fullName);
-                        }}
-                        alt="user-profile" 
-                        className='object-cover rounded-full'
-                    />
-                </div>
-            </div>
             <div className='flex flex-col flex-1 overflow-hidden'>
                 <div className='flex justify-between items-center gap-2'>
                     <p className='font-semibold text-white truncate'>{user?.fullName}</p>

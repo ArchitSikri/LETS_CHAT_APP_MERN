@@ -7,7 +7,7 @@ import { getAvatarFallback } from '../utils/avatar';
 const MessagesContainer = () => {
     const { selectedUser, authUser } = useSelector(store => store.user);
 
-    return (
+    return ( 
         <>
             {selectedUser !== null ? (
                 <div className='flex-1 flex flex-col bg-black/20'>
