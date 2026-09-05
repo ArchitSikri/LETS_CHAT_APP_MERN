@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import Message from './Message'
 import useGetMsgs from '../hooks/useGetMsgs';
 import { useSelector } from 'react-redux';
+import useGetRealTimeMessage from '../hooks/useRealTimeMessage';
 
 const getUserId = (user) => user?._id || user?.id;
 
@@ -13,6 +14,7 @@ const getSenderId = (message) => {
 const Messages = () => {
     const messagesEndRef = useRef(null);
     useGetMsgs();
+    useGetRealTimeMessage();
     const {messages} = useSelector(store => store.message);
     const {authUser, selectedUser} = useSelector(store => store.user);
     const authUserId = getUserId(authUser);
@@ -31,14 +33,14 @@ const Messages = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    if(!messages) return;
-
     return (
         <div className='flex-1 overflow-auto px-4 py-4 simple-scrollbar'>
             <div className='flex flex-col gap-3'>
-                {visibleMessages.map((message) => (
+                {visibleMessages.length > 0 ? visibleMessages.map((message) => (
                     <Message key={message._id} message={message} />
-                ))}
+                )) : (
+                    <p className='text-center text-gray-400 py-8'>No messages yet</p>
+                )}
                 <div ref={messagesEndRef} />
             </div>
         </div>

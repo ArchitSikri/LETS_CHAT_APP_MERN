@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { useSelector , useDispatch } from 'react-redux'
 import io from 'socket.io-client'
 import { setOnlineUsers } from './redux/UserSlice'
+import { setSocket } from './redux/SocketSlice'
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,7 @@ const App = () => {
     const socket = io('http://localhost:5000', {
       query: { userId: authUser._id || authUser.id }
     });
+    dispatch(setSocket(socket));
 
     socket.on('getonlineusers', (onlineUserIds) => {
       dispatch(setOnlineUsers(Array.isArray(onlineUserIds)
@@ -48,6 +50,7 @@ const App = () => {
 
     return () => {
       socket.close();
+      dispatch(setSocket(null));
     };
   }, [authUser, dispatch])
 

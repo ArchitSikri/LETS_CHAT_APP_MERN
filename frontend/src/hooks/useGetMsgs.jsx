@@ -6,21 +6,22 @@ import {setMessages} from "../redux/MsgSlice"
 const useGetMsgs = () => {
     const {selectedUser} = useSelector(store => store.user);
     const dispatch = useDispatch();
+    const selectedUserId = selectedUser?._id || selectedUser?.id;
     
     useEffect(()=>{
         const Fetchmsg = async () => {
             try{
                 axios.defaults.withCredentials = true;
-                const res = await axios.get(`http://localhost:5000/api/msg/getmsg/${selectedUser?._id}`)
+                const res = await axios.get(`http://localhost:5000/api/msg/getmsg/${selectedUserId}`)
                 dispatch(setMessages(Array.isArray(res.data) ? res.data : []))
             }catch(err){
                 console.log(err)
             }
         }
-        if(selectedUser?._id) {
+        if(selectedUserId) {
             Fetchmsg();
         }
-    },[selectedUser?._id, dispatch])
+    }, [selectedUserId, dispatch])
 }
 
 export default useGetMsgs

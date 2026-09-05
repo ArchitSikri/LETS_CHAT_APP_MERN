@@ -26,13 +26,17 @@ app.get('/', (req, res) => {
     res.status(200).json({ message: 'Chat app API is running' });
 });
 
-app.use("/api/users" , userRoutes);
-app.use("/api/msg" , msgRoutes);
-
-
 const port = process.env.PORT || 5000;
 const server = http.createServer(app);
-initializeSocket(server);
+const io = initializeSocket(server);
+
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
+
+app.use("/api/users" , userRoutes);
+app.use("/api/msg" , msgRoutes);
 
 server.listen(port , ()=>{
     connectToDb();
