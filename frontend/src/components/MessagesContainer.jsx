@@ -5,7 +5,11 @@ import SendInput from './SendInput'
 import { getAvatarFallback } from '../utils/avatar';
 
 const MessagesContainer = () => {
-    const { selectedUser, authUser } = useSelector(store => store.user);
+    const { selectedUser, authUser, onlineUsers } = useSelector(store => store.user);
+    const selectedUserId = selectedUser?._id || selectedUser?.id;
+    const isSelectedUserOnline = selectedUserId
+        ? onlineUsers?.includes(selectedUserId)
+        : false;
 
     return ( 
         <>
@@ -15,7 +19,7 @@ const MessagesContainer = () => {
                     <div className='bg-black/30 backdrop-blur-sm px-4 py-3 border-b border-white/10'>
                         <div className='flex items-center justify-between'>
                             <div className='flex items-center gap-3'>
-                                <div className={`avatar ${selectedUser?.isOnline ? 'online' : 'offline'}`}>
+                                <div className={`avatar ${isSelectedUserOnline ? 'online' : 'offline'}`}>
                                     <div className='w-12 h-12 rounded-full'>
                                         <img
                                             src={selectedUser?.profilePhoto || getAvatarFallback(selectedUser?.fullName)}
@@ -31,7 +35,7 @@ const MessagesContainer = () => {
                                 <div>
                                     <p className='text-white font-semibold'>{selectedUser?.fullName}</p>
                                     <p className='text-sm text-gray-400'>
-                                        {selectedUser?.isOnline ? 'Active now' : 'Offline'}
+                                        {isSelectedUserOnline ? 'Online' : 'Offline'}
                                     </p>
                                 </div>
                             </div>

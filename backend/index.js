@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 const dotenv =  require('dotenv');
 dotenv.config();
 const connectToDb = require('./database/config');
@@ -7,6 +8,7 @@ const userRoutes = require('./routes/user.route');
 const cookieparser = require('cookie-parser');
 const msgRoutes = require("./routes/message.route");
 const cors = require('cors');
+const initializeSocket = require('./socket/socket');
 
 
 app.use(express.urlencoded({extended:true}));
@@ -28,9 +30,11 @@ app.use("/api/users" , userRoutes);
 app.use("/api/msg" , msgRoutes);
 
 
-const port = process.env.PORT ;
+const port = process.env.PORT || 5000;
+const server = http.createServer(app);
+initializeSocket(server);
 
-app.listen(port , ()=>{
+server.listen(port , ()=>{
     connectToDb();
     console.log(`server is running on port ${port}`);
 })
